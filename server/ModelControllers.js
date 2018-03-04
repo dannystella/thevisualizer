@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-mongoose.connect('mongodb://danny:danny@ds255258.mlab.com:55258/musicurls12321')
+mongoose.connect('mongodb://danny:danny@ds255308.mlab.com:55308/mymusicsongs')
 var db = mongoose.connection;
 
 let musicSchema = mongoose.Schema({
@@ -15,7 +15,13 @@ helpers.getMusic = function() {
 }
 
 helpers.save = (song) => {
-    return Song.create(song);
+    return Song.create(song, function(err){
+        if(err){
+            console.log(err);
+        } else {
+            console.log("success");
+        }
+    });
 }
 
 helpers.deleteSong = function(url) {

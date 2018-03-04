@@ -12,9 +12,9 @@ export default class List extends React.Component {
               <ul>
                {this.props.currentList.map((item, i) => {
                    return (<div>
-                       <li onClick = {(e => {
+                       <button onClick = {(e => {
                          this.props.deleteSong(item)
-                       })}>x</li>
+                       })}>x</button>
                        <li key ={i} onClick = {(e => {
                        this.props.syncMusic(item.url);
                    })}>{item.url}</li>

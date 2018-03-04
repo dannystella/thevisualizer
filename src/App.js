@@ -17,6 +17,7 @@ class App extends Component {
         this.createVisualization = this.createVisualization.bind(this);
         this.syncMusic =this.syncMusic.bind(this);
         this.listMusic =this.listMusic.bind(this);
+        this.deleteSong =this.deleteSong.bind(this);
     }
 
     componentDidMount(){
@@ -25,11 +26,14 @@ class App extends Component {
     
 
     syncMusic(input) {
+      
       this.setState({
         currentSong: input
       })
       axios.post('/music', {
-           url: input
+        headers: {'Content-Type': 'application/json;charset=UTF-8',
+        "Access-Control-Allow-Origin": "*",},
+        url: input
       })
     }
     
@@ -43,6 +47,12 @@ class App extends Component {
     }
 
     deleteSong(song){
+        var newList = this.state.currentList.filter(item => {
+            return item !== song;
+        })
+        this.setState({
+            currentList: newList
+        })
       axios.post('delete', {
           url: song
       }).then(() => {
