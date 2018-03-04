@@ -9,15 +9,14 @@ export default class List extends React.Component {
     render() {
         return (
             <div>
-              <ul>
+              <ul className = "list-group">
                {this.props.currentList.map((item, i) => {
                    return (<div>
-                       <button onClick = {(e => {
-                         this.props.deleteSong(item)
-                       })}>x</button>
-                       <li key ={i} onClick = {(e => {
+                       <li className = "list-group-item border-0" key ={i} onClick = {(e => {
                        this.props.syncMusic(item.url);
-                   })}>{item.url}</li>
+                   })}>{item.url} <button className = "btn btn-primary btn-sm" onClick = {(e => {
+                    this.props.deleteSong(item)
+                  })}>x</button></li>
                    </div>)
                })}   
               </ul>

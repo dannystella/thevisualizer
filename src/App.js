@@ -3,27 +3,49 @@ import axios from 'axios';
 
 import Search from './search.js';
 import List from './list.js';
+import VisualOne from './visual1.js';
+import VisualTwo from './visual2.js';
+
 import './App.css';
+// import './App2.css';
 
 class App extends Component {
     constructor(props){
         super(props);
 
         this.state = {
+          visualState: 1,  
           currentSong: '',
-          currentList: []  
+          currentList: [],
+          listTrigger: false  
         }
-
-        this.createVisualization = this.createVisualization.bind(this);
+        let State = 1;
+        // this.createVisualization = this.createVisualization.bind(this);
+        // this.createVisualizationTwo = this.createVisualizationTwo.bind(this);
         this.syncMusic =this.syncMusic.bind(this);
         this.listMusic =this.listMusic.bind(this);
         this.deleteSong =this.deleteSong.bind(this);
+        this.listHide =this.listHide.bind(this);
+        this.controlState = this.controlState.bind(this);
     }
 
+
     componentDidMount(){
-        this.createVisualization()
+        // this.createVisualizationTwo()
     }
     
+    controlState(input) {
+        if(input === 1){
+            this.setState({
+                visualState: 1
+            })
+        } else if(input === 2){
+            this.setState({
+                visualState: 2
+            })
+        }
+
+    }
 
     syncMusic(input) {
       
@@ -31,9 +53,9 @@ class App extends Component {
         currentSong: input
       })
       axios.post('/music', {
-        headers: {'Content-Type': 'application/json;charset=UTF-8',
-        "Access-Control-Allow-Origin": "*",},
         url: input
+      }).then(() => {
+          this.listMusic();
       })
     }
     
@@ -44,6 +66,13 @@ class App extends Component {
             currentList: data.data
         });
       })    
+    }
+    
+    listHide(){
+        var newTrigger = !this.state.listTrigger;
+        this.setState({
+            listTrigger: newTrigger
+        })
     }
 
     deleteSong(song){
@@ -61,58 +90,30 @@ class App extends Component {
     }
 
 
-    createVisualization(){
-        let context = new AudioContext();
-        let analyser = context.createAnalyser();
-        let canvas = this.refs.analyzerCanvas;
-        let ctx = canvas.getContext('2d');
-        let audio = this.refs.audio;
-        audio.crossOrigin = "anonymous";
-        let audioSrc = context.createMediaElementSource(audio);
-        audioSrc.connect(analyser);
-        audioSrc.connect(context.destination);
-        analyser.connect(context.destination);
+ 
 
-        function renderFrame(){
-            let freqData = new Uint8Array(analyser.frequencyBinCount)
-            requestAnimationFrame(renderFrame)
-            analyser.getByteFrequencyData(freqData)
-            ctx.clearRect(0, 0, canvas.width, canvas.height)
-            ctx.fillStyle = '#9933ff';
-            let bars = 200;
-            for (var i = 0; i < bars; i++) {
-                let bar_x = i * 3;
-                let bar_width = 2;
-                let bar_height = -(freqData[i] / 2);
-                ctx.fillRect(bar_x, canvas.height, bar_width, bar_height)
-            }
-        };
-        renderFrame()
-    }
+
 
     render() {
         return (
             <div className="App">
+                {this.state.visualState === 1 && <VisualOne currentSong = {this.state.currentSong} />}
+                {this.state.visualState === 2 && <VisualTwo currentSong = {this.state.currentSong} />}
                 <Search syncMusic = {this.syncMusic} />
-                <div id="mp3_player">
-                    <div id="audio_box">
-                        <audio
-                            ref="audio"
-                            autoPlay={true}
-                            controls={true}
-                            src={this.state.currentSong}
-                            >
-                            </audio>
-                        </div>
-                        <canvas
-                            ref="analyzerCanvas"
-                            id="analyzer"
-                            >
-                            </canvas>
-                        </div>
-                        <div>
-                        <button onClick = {this.listMusic}>Get all Music</button>
-                        <List deleteSong = {this.deleteSong} syncMusic = {this.syncMusic} currentList = {this.state.currentList} listMusic = {this.listMusic}/>    
+
+                        <div>   
+                        <button onClick = {(e => {
+                            this.listMusic()
+                            this.listHide()
+                        })} >Get all Music</button>
+                        <button onClick = {(e => {
+                            this.controlState(1)
+                        })}>Visual One </button>    
+                        <button onClick = {(e => {
+                            this.controlState(2)
+                        })}>Visual Two </button>                         
+                        { this.state.listTrigger && <List deleteSong = {this.deleteSong} syncMusic = {this.syncMusic} currentList = {this.state.currentList} listMusic = {this.listMusic}/>    }
+                
                         </div>
                     </div>
                 );

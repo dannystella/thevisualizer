@@ -10,14 +10,16 @@
     "mongoose": "^5.0.8",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
-    "react-scripts": "1.1.1"
+    "react-scripts": "1.1.1",
+    "yarn": "^1.5.1"
   },
   "scripts": {
+    "client": "cd client && yarn start",
+    "server": " server/index.js",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject",
-    "server": "nodemon server/index.js --ignore client"
+    "eject": "react-scripts eject"
   },
-  "proxy": "http://localhost:8080"
+  "proxy": "http://localhost:5000"
 }

@@ -1,5 +1,6 @@
 .App {
   text-align: center;
+  width: 100%
 }
 
 .App-logo {
@@ -20,6 +21,10 @@
 
 .App-intro {
   font-size: large;
+}
+
+#mp3_player {
+width: 100%
 }
 
 @keyframes App-logo-spin {
