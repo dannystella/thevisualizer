@@ -8,9 +8,9 @@ app.use(cors());
 
 const helpers = require('./ModelControllers.js').helpers
 
-app.get('/', function(req, res){
+// app.get('/', function(req, res){
 
-})
+// })
 
 app.use(express.static(__dirname + '/../public/'));
 
