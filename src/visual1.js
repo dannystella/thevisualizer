@@ -3,6 +3,7 @@ import React from 'react';
 export default class VisualTwo extends React.Component {
     constructor(props) {
         super(props);
+        this.createVisualization = this.createVisualization.bind(this);
     }
     componentDidMount(){
         this.createVisualization()
@@ -40,11 +41,39 @@ export default class VisualTwo extends React.Component {
         };
         renderFrame()
     }
-
+    play(){
+        this.refs.audio.play();
+    }
+    pause(){
+        this.refs.audio.pause();
+    }
+    VolumeUp(){
+        this.refs.audio.volume+=0.1;
+    }
+    VolumeDown(){
+        this.refs.audio.volume-=0.1;
+    }
 
     render() {
         return (
+            
             <div id="mp3_player">
+             <div className="ui inverted segment">
+                <div className="ui inverted secondary four item menu">
+                    <a className="item" onClick = {this.play.bind(this)}>
+                    Play
+                    </a>
+                    <a className="item" onClick = {this.pause.bind(this)}>
+                    Pause
+                    </a>
+                    <a className="item" onClick = {this.VolumeUp.bind(this)}>
+                    Volume Up
+                    </a>
+                    <a className="item" onClick = {this.VolumeDown.bind(this)}>
+                    Volume Down
+                    </a>
+                </div>
+                </div>
             <div id="audio_box">
                 <audio
                     ref="audio"

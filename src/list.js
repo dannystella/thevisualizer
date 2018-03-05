@@ -9,7 +9,7 @@ export default class List extends React.Component {
     render() {
         return (
             <div>
-              <ul className = "list-group">
+              <ul className = "list-group slideDown slideUp">
                {this.props.currentList.map((item, i) => {
                    return (<div>
                        <li className = "list-group-item border-0" key ={i} onClick = {(e => {

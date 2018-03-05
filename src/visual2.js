@@ -3,6 +3,7 @@ import React from 'react';
 export default class VisualTwo extends React.Component {
     constructor(props) {
         super(props);
+        this.createVisualizationTwo = this.createVisualizationTwo.bind(this);
     }
     componentDidMount(){
         this.createVisualizationTwo()
@@ -29,7 +30,6 @@ export default class VisualTwo extends React.Component {
             ctx.fillStyle = "rgba(0,0,0,0.03)";
             var hue = Math.sin( analyser.context.currentTime * 0.05 ) * 360;
             ctx.strokeStyle = "hsla(" + hue + ", 80%, 50%, 0.8)";
-            // ctx.setLineDash([2, 2]);
             ctx.lineWidth = 2;
         
         
@@ -42,12 +42,8 @@ export default class VisualTwo extends React.Component {
             var barWidth = Math.round(canvas.width / analyser.frequencyBinCount);
         
             for (var i = 0; i < ( analyser.frequencyBinCount - 1 ); i++) {
-                // Not sure what 256 is yet, but it doesn't change when we change DETAIL...
-                // ... maybe it has to do with Uint8 in the array. Maybe values in Uint8 array only
-                // exist between 0-256... hmm...
                 var percent = freqDomain[i] / 256;
-                var barHeight = canvas.height * percent;
-        
+                var barHeight = canvas.height * percent;        
                 ctx.lineTo( (i + 1) * barWidth, barHeight );
             };
             ctx.lineTo( canvas.width, Math.round( canvas.height / 2 ) );
@@ -59,11 +55,38 @@ export default class VisualTwo extends React.Component {
         }
         loop()
     }
-
+    play(){
+        this.refs.audio.play();
+    }
+    pause(){
+        this.refs.audio.pause();
+    }
+    VolumeUp(){
+        this.refs.audio.volume+=0.1;
+    }
+    VolumeDown(){
+        this.refs.audio.volume-=0.1;
+    }
 
     render() {
         return (
             <div id="mp3_player">
+              <div className="ui inverted segment">
+                <div className="ui inverted secondary four item menu">
+                    <a className="item" onClick = {this.play.bind(this)}>
+                    Play
+                    </a>
+                    <a className="item" onClick = {this.pause.bind(this)}>
+                    Pause
+                    </a>
+                    <a className="item" onClick = {this.VolumeUp.bind(this)}>
+                    Volume Up
+                    </a>
+                    <a className="item" onClick = {this.VolumeDown.bind(this)}>
+                    Volume Down
+                    </a>
+                </div>
+                </div>
             <div id="audio_box">
                 <audio
                     ref="audio"

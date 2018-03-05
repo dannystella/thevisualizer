@@ -11,15 +11,16 @@
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-scripts": "1.1.1",
+    "semantic-ui-react": "^0.78.3",
     "yarn": "^1.5.1"
   },
   "scripts": {
     "client": "cd client && yarn start",
     "server": " server/index.js",
-    "start": "react-scripts build",
+    "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },
-  "proxy": "process.env.PORT || http://localhost:5000"
+  "proxy": "http://localhost:5000"
 }

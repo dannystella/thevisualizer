@@ -5,7 +5,7 @@ import Search from './search.js';
 import List from './list.js';
 import VisualOne from './visual1.js';
 import VisualTwo from './visual2.js';
-
+import { Menu, Segment } from 'semantic-ui-react'
 import './App.css';
 // import './App2.css';
 
@@ -27,8 +27,12 @@ class App extends Component {
         this.deleteSong =this.deleteSong.bind(this);
         this.listHide =this.listHide.bind(this);
         this.controlState = this.controlState.bind(this);
+        this.play = this.play.bind(this);
     }
 
+    play(){
+        this.refs.audio.play();
+    }
 
     componentDidMount(){
         // this.createVisualizationTwo()
@@ -97,18 +101,19 @@ class App extends Component {
     render() {
         return (
             <div className="App">
+               
                 {this.state.visualState === 1 && <VisualOne currentSong = {this.state.currentSong} />}
                 {this.state.visualState === 2 && <VisualTwo currentSong = {this.state.currentSong} />}
                 <Search syncMusic = {this.syncMusic} />
 
-                        <div>   
+                        <div>  
+                        <button onClick = {(e => {
+                            this.controlState(1)
+                        })}>Visual One </button>                               
                         <button onClick = {(e => {
                             this.listMusic()
                             this.listHide()
-                        })} >Get all Music</button>
-                        <button onClick = {(e => {
-                            this.controlState(1)
-                        })}>Visual One </button>    
+                        })} >Get all Music</button>  
                         <button onClick = {(e => {
                             this.controlState(2)
                         })}>Visual Two </button>                         

@@ -34,7 +34,7 @@ export default class Search extends React.Component {
                         }
                 }
                  
-                 placeholder = "search a song"
+                 placeholder = "       search a song"
                 />          
             </div>
         )
