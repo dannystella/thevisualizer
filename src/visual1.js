@@ -9,10 +9,7 @@ export default class VisualTwo extends React.Component {
     }
 
     createVisualization(){
-        // if(audioCtx !== undefined){
-        //     audioCtx.close().then(function() {
-        //     });
-        // }
+        // Window.AudioContext.close()
         let context = new AudioContext();
         let analyser = context.createAnalyser();
         let canvas = this.refs.analyzerCanvas;

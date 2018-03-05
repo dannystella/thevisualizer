@@ -4,7 +4,7 @@ const bodyParser = require('body-parser');
 
 let app = express();
 app.use(cors());
-app.options('*', cors({origin: 'http://localhost:3000'}));
+// app.options('*', cors({origin: 'http://localhost:3000'}));
 
 const helpers = require('./ModelControllers.js').helpers
 
