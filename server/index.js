@@ -8,9 +8,11 @@ app.use(cors());
 
 const helpers = require('./ModelControllers.js').helpers
 
+app.get('/', function(req, res){
 
+})
 
-app.use(express.static(__dirname + '/../public/index.html'));
+app.use(express.static(__dirname + '/../public/'));
 
 app.use(bodyParser.json())
 
@@ -27,6 +29,9 @@ app.options(/.*/, function(req, res) {
 });
 
 //GET ALL MUSIC ROUTE
+
+
+
 
 app.get('/music', function(req, res) {
   helpers.getMusic()
