@@ -1,15 +1,15 @@
 import React from 'react';
-
+import range from 'lodash';
 export default class VisualTwo extends React.Component {
     constructor(props) {
         super(props);
         this.createVisualizationTwo = this.createVisualizationTwo.bind(this);
     }
-    componentDidMount(){
-        this.createVisualizationTwo()
+    componentDidMount() {
+        this.createVisualizationTwo();
     }
 
-    createVisualizationTwo(){
+    createVisualizationTwo() {
         // Window.AudioContext.close()
         let context = new AudioContext();
         let analyser = context.createAnalyser();
@@ -31,41 +31,38 @@ export default class VisualTwo extends React.Component {
             var hue = Math.sin( analyser.context.currentTime * 0.05 ) * 360;
             ctx.strokeStyle = "hsla(" + hue + ", 80%, 50%, 0.8)";
             ctx.lineWidth = 2;
-        
-        
             // ctx.clearRect( 0, 0, canvas.width, canvas.height );
             ctx.fillRect( 0, 0, canvas.width, canvas.height );
-        
             ctx.beginPath();
             ctx.moveTo( 0, Math.round( canvas.height / 2 ) );
-        
             var barWidth = Math.round(canvas.width / analyser.frequencyBinCount);
-        
             for (var i = 0; i < ( analyser.frequencyBinCount - 1 ); i++) {
                 var percent = freqDomain[i] / 256;
                 var barHeight = canvas.height * percent;        
                 ctx.lineTo( (i + 1) * barWidth, barHeight );
             };
             ctx.lineTo( canvas.width, Math.round( canvas.height / 2 ) );
-        
             ctx.stroke();
             ctx.closePath();
-        
             requestAnimationFrame(loop);
         }
-        loop()
+        loop();
     }
-    play(){
+    play() {
         this.refs.audio.play();
     }
-    pause(){
+    pause() {
         this.refs.audio.pause();
     }
-    VolumeUp(){
-        this.refs.audio.volume+=0.1;
+    VolumeUp() {
+        if(this.refs.audio.volume !== 1) {
+          this.refs.audio.volume+=0.1;
+        }
     }
-    VolumeDown(){
-        this.refs.audio.volume-=0.1;
+    VolumeDown() {
+        if(this.refs.audio.volume > 0.1) {
+          this.refs.audio.volume-=0.1;
+        }
     }
 
     render() {
@@ -80,20 +77,20 @@ export default class VisualTwo extends React.Component {
                     Pause
                     </a>
                     <a className="item" onClick = {this.VolumeUp.bind(this)}>
-                    Volume Up
+                    Volume +
                     </a>
                     <a className="item" onClick = {this.VolumeDown.bind(this)}>
-                    Volume Down
+                    Volume -
                     </a>
                 </div>
                 </div>
-            <div id="audio_box">
-                <audio
-                    ref="audio"
-                    autoPlay={true}
-                    controls={true}
-                    crossOrigin="anonymous"
-                    src={this.props.currentSong}
+                <div id="audio_box">
+                    <audio
+                        ref="audio"
+                        autoPlay={true}
+                        controls={true}
+                        crossOrigin="anonymous"
+                        src={this.props.currentSong}
                     >
                     </audio>
                 </div>
@@ -101,8 +98,8 @@ export default class VisualTwo extends React.Component {
                     ref="analyzerCanvas"
                     id="analyzer"
                     >
-                    </canvas>
-                </div>
+                </canvas>
+            </div>
         )
     }
 }

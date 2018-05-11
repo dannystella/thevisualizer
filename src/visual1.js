@@ -5,11 +5,12 @@ export default class VisualTwo extends React.Component {
         super(props);
         this.createVisualization = this.createVisualization.bind(this);
     }
-    componentDidMount(){
+    
+    componentDidMount() {
         this.createVisualization()
     }
 
-    createVisualization(){
+    createVisualization() {
         // Window.AudioContext.close()
         let context = new AudioContext();
         let analyser = context.createAnalyser();
@@ -25,38 +26,41 @@ export default class VisualTwo extends React.Component {
         audioSrc.connect(context.destination);
         analyser.connect(context.destination);
 
-        function renderFrame(){
-            let freqData = new Uint8Array(analyser.frequencyBinCount)
-            requestAnimationFrame(renderFrame)
-            analyser.getByteFrequencyData(freqData)
-            ctx.clearRect(0, 0, canvas.width, canvas.height)
+        function renderFrame() {
+            let freqData = new Uint8Array(analyser.frequencyBinCount);
+            requestAnimationFrame(renderFrame);
+            analyser.getByteFrequencyData(freqData);
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
             ctx.fillStyle = '#9933ff';
             let bars = 200;
             for (var i = 0; i < bars; i++) {
-                let bar_x = i * 3;
-                let bar_width = 2;
-                let bar_height = -(freqData[i] / 2);
-                ctx.fillRect(bar_x, canvas.height, bar_width, bar_height)
+              let bar_x = i * 3;
+              let bar_width = 2;
+              let bar_height = -(freqData[i] / 2);
+              ctx.fillRect(bar_x, canvas.height, bar_width, bar_height);
             }
         };
-        renderFrame()
+        renderFrame();
     }
-    play(){
+    play() {
         this.refs.audio.play();
     }
-    pause(){
+    pause() {
         this.refs.audio.pause();
     }
-    VolumeUp(){
-        this.refs.audio.volume+=0.1;
+    VolumeUp() {
+        if(this.refs.audio.volume !== 1) {
+          this.refs.audio.volume+=0.1;
+        }
     }
-    VolumeDown(){
-        this.refs.audio.volume-=0.1;
+    VolumeDown() {
+        if(this.refs.audio.volume > 0.1) {
+          this.refs.audio.volume-=0.1;
+        }
     }
 
     render() {
         return (
-            
             <div id="mp3_player">
              <div className="ui inverted segment">
                 <div className="ui inverted secondary four item menu">
@@ -67,10 +71,10 @@ export default class VisualTwo extends React.Component {
                     Pause
                     </a>
                     <a className="item" onClick = {this.VolumeUp.bind(this)}>
-                    Volume Up
+                    Volume +
                     </a>
                     <a className="item" onClick = {this.VolumeDown.bind(this)}>
-                    Volume Down
+                    Volume -
                     </a>
                 </div>
                 </div>
@@ -81,15 +85,16 @@ export default class VisualTwo extends React.Component {
                     controls={true}
                     crossOrigin="anonymous"
                     src={this.props.currentSong}
+                    // {this.props.currentSong}
                     >
                     </audio>
-                </div>
+            </div>
                 <canvas
                     ref="analyzerCanvas"
                     id="analyzer"
                     >
-                    </canvas>
-                </div>
+                </canvas>
+        </div>
         )
     }
 }

@@ -5,6 +5,7 @@ import Search from './search.js';
 import List from './list.js';
 import VisualOne from './visual1.js';
 import VisualTwo from './visual2.js';
+import VisualThree from './visual3.js';
 import { Menu, Segment } from 'semantic-ui-react'
 import './App.css';
 // import './App2.css';
@@ -30,22 +31,26 @@ class App extends Component {
         this.play = this.play.bind(this);
     }
 
-    play(){
+    play() {
         this.refs.audio.play();
     }
 
-    componentDidMount(){
+    componentDidMount() {
         // this.createVisualizationTwo()
     }
     
     controlState(input) {
-        if(input === 1){
+        if(input === 1 ){
             this.setState({
                 visualState: 1
             })
-        } else if(input === 2){
+        } else if(input === 2) {
             this.setState({
                 visualState: 2
+            })
+        } else if(input === 3) {
+            this.setState({
+                visualState: 3
             })
         }
 
@@ -93,19 +98,14 @@ class App extends Component {
       })    
     }
 
-
- 
-
-
-
     render() {
         return (
             <div className="App">
                
                 {this.state.visualState === 1 && <VisualOne currentSong = {this.state.currentSong} />}
                 {this.state.visualState === 2 && <VisualTwo currentSong = {this.state.currentSong} />}
+                {/* {this.state.visualState === 3 && <VisualThree currentSong = {this.state.currentSong} />} */}
                 <Search syncMusic = {this.syncMusic} />
-
                         <div>  
                         <button onClick = {(e => {
                             this.controlState(1)
@@ -117,8 +117,10 @@ class App extends Component {
                         <button onClick = {(e => {
                             this.controlState(2)
                         })}>Visual Two </button>                         
+                        {/* <button onClick = {(e => {
+                            this.controlState(3)
+                        })}>Visual Three </button>                          */}
                         { this.state.listTrigger && <List deleteSong = {this.deleteSong} syncMusic = {this.syncMusic} currentList = {this.state.currentList} listMusic = {this.listMusic}/>    }
-                
                         </div>
                     </div>
                 );

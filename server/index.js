@@ -15,23 +15,24 @@ const helpers = require('./ModelControllers.js').helpers
 app.use(express.static(__dirname + '/../public/'));
 
 app.use(bodyParser.json())
+app.use(function (req, res, next) {
 
-app.options(/.*/, function(req, res) {
-  res.removeHeader('Content-Type');
-  res.writeHead(200, {
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Methods': 'GET,POST,OPTIONS',
-    'Access-Control-Allow-Headers': 'X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept',
-    'Access-Control-Allow-Credentials': false,
-    'Access-Control-Max-Age': 86400,
-  });
-  res.end('{}');
+  // Website you wish to allow to connect
+  res.setHeader('Access-Control-Allow-Origin', 'http://http://localhost:3000');
+
+  // Request methods you wish to allow
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+
+  // Request headers you wish to allow
+  res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+
+  res.setHeader('Access-Control-Allow-Credentials', true);
+
+  // Pass to next layer of middleware
+  next();
 });
 
 //GET ALL MUSIC ROUTE
-
-
-
 
 app.get('/music', function(req, res) {
   helpers.getMusic()
@@ -39,9 +40,6 @@ app.get('/music', function(req, res) {
     res.send(data);
   })
 })
-
-
-
 
 //POST SONG URL TO DATABASE ROUTE
 
@@ -57,6 +55,7 @@ app.post('/delete', function(req, res) {
    
 })
 
-const port = process.env.PORT || 5000;
+const port = process.env.PORT  || 5000;
+// process.env.PORT 
 
 app.listen(port, () => console.log(`Listening on port ${port}`));
