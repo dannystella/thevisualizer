@@ -36,7 +36,7 @@ app.use(function (req, res, next) {
 
 app.get('/music', function(req, res) {
   helpers.getMusic()
-  .then(function(data){
+  .then(function(data) {
     res.send(data);
   })
 })
@@ -55,7 +55,7 @@ app.post('/delete', function(req, res) {
    
 })
 
-const port = process.env.PORT  || 5000;
+const port = process.env.PORT || 5000;
 // process.env.PORT 
 
 app.listen(port, () => console.log(`Listening on port ${port}`));
