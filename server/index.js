@@ -12,7 +12,7 @@ const helpers = require('./ModelControllers.js').helpers
 
 // })
 
-app.use(express.static(__dirname + '/../public/'));
+app.use(express.static(__dirname + '/../build/'));
 
 app.use(bodyParser.json())
 app.use(function (req, res, next) {
