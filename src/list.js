@@ -20,7 +20,7 @@ export default class List extends React.Component {
                    return (<div key ={i}>
                        <li style = {{backgroundColor: this.props.visualState === 1 ? 'black' : 'white' }}className = "list-group-item border-0" key ={i} onClick = {(e => {
                            this.props.syncMusic(item.url);
-                   })}><p style = {{color: this.props.visualState === 1 ? 'white' : 'black'}}>{item.url}<button className = "btn btn-primary btn-sm" onClick = {(e => {
+                   })}><p style = {{color: this.props.visualState === 1 ? 'white' : 'black'}}>{item.url}  <button className = "btn btn-primary btn-sm" onClick = {(e => {
                     this.props.deleteSong(item)
               })}>x</button></p> </li>
                    </div>)

@@ -25,6 +25,7 @@ class App extends Component {
         // this.createVisualization = this.createVisualization.bind(this);
         // this.createVisualizationTwo = this.createVisualizationTwo.bind(this);
         this.syncMusic =this.syncMusic.bind(this);
+        this.addSong =this.addSong.bind(this);
         this.listMusic =this.listMusic.bind(this);
         this.deleteSong =this.deleteSong.bind(this);
         this.listHide =this.listHide.bind(this);
@@ -83,7 +84,11 @@ class App extends Component {
         }
     }
     syncMusic(input) {
-      
+      this.setState({
+        currentSong: input
+      })
+    }
+    addSong(input) {
       this.setState({
         currentSong: input
       })
@@ -119,7 +124,7 @@ class App extends Component {
         })
       axios.post('/delete', {
           url: song
-      }).then(() => {
+      }).then((data) => {
         this.listMusic()
       })    
     }
@@ -161,14 +166,13 @@ class App extends Component {
                     controls={true}
                     crossOrigin="anonymous"
                     src={this.state.currentSong}
-                    // {this.props.currentSong}
                     >
                     </audio>
             </div>               
                 {this.state.visualState === 1 && <VisualOne currentSong = {this.state.currentSong} visualState = {this.state.visualState} context = {this.state.context} source = {this.state.source} />}
                 {this.state.visualState === 2 && <VisualTwo currentSong = {this.state.currentSong} visualState = {this.state.visualState} context = {this.state.context} source = {this.state.source} />}
                 {/* {this.state.visualState === 3 && <VisualThree currentSong = {this.state.currentSong} />} */}
-                <Search syncMusic = {this.syncMusic} />
+                <Search addSong = {this.addSong} />
                         <div style = {{backgroundColor: this.state.visualState === 1 ? 'black' : 'white' }}>  
                         <button onClick = {(e => {
                             this.controlState(1);

@@ -48,13 +48,17 @@ app.get('/music', function(req, res) {
 
 app.post('/music', function(req, res) {
   // console.log(req.body)
-   helpers.save(req.body);
+   helpers.save(req.body).then((data) => {
+     res.sendStatus(202);
+   })
 })
 
 //DELETE SONG URL FROM DATABASE ROUTE
 
 app.post('/delete', function(req, res) {
-  helpers.deleteSong(req.body.url)
+  helpers.deleteSong(req.body.url).then(() =>{
+    res.sendStatus(202);
+  })
    
 })
 
