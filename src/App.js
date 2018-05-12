@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-
+import StartAudioContext from 'startaudiocontext';
 import Search from './search.js';
 import List from './list.js';
 import VisualOne from './visual1.js';
@@ -42,6 +42,7 @@ class App extends Component {
         console.log("mounted");
         let audio = this.refs.audio;
         let context = new AudioContext();
+        StartAudioContext(context, "#mainButton")
         this.setState({
             context: context
         })
@@ -181,7 +182,7 @@ class App extends Component {
                         <button onClick = {(e => {
                             this.controlState(1);
                         })}>Visual One </button>                               
-                        <button onClick = {(e => {
+                        <button id = "mainButton" onClick = {(e => {
                             this.listMusic();
                             this.listHide();
                         })} >Get all Music</button>  
