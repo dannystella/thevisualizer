@@ -6,16 +6,23 @@ export default class List extends React.Component {
     }
 
     render() {
+        // const backgroundWhite = {
+        //     backgroundColor: "white"
+        // }
+        
+        // const backgroundBlack = {
+        //     backgroundColor: "black"
+        // }
         return (
-            <div>
-              <ul className = "list-group slideDown slideUp">
+            <div style = {{backgroundColor: this.props.visualState === 1 ? 'black' : 'white' }}>
+              <ul className = "list-group slideDown slideUp" style = {{backgroundColor: this.props.visualState === 1 ? 'black' : 'white', }}>
                {this.props.currentList.map((item, i) => {
                    return (<div key ={i}>
-                       <li className = "list-group-item border-0" key ={i} onClick = {(e => {
+                       <li style = {{backgroundColor: this.props.visualState === 1 ? 'black' : 'white' }}className = "list-group-item border-0" key ={i} onClick = {(e => {
                            this.props.syncMusic(item.url);
-                   })}>{item.url} <button  className = "btn btn-primary btn-sm" onClick = {(e => {
-                        this.props.deleteSong(item)
-                  })}>x</button></li>
+                   })}><p style = {{color: this.props.visualState === 1 ? 'white' : 'black'}}>{item.url}<button className = "btn btn-primary btn-sm" onClick = {(e => {
+                    this.props.deleteSong(item)
+              })}>x</button></p> </li>
                    </div>)
                })}   
               </ul>

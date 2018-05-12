@@ -8,7 +8,7 @@ export default class Search extends React.Component {
         }
     }
 
-    resetInput(){
+    resetInput() {
         this.setState({
             searchInput:''
         })  
@@ -17,7 +17,7 @@ export default class Search extends React.Component {
     render() {
         return (
             <div>
-              <input type= "text"
+              <input className = "search" type= "text"
                 value = {this.state.searchInput}
                 onChange= {(e) => {
                  this.setState({searchInput: e.target.value}, () => {
@@ -31,7 +31,7 @@ export default class Search extends React.Component {
                         }
                     }
                 }
-                 placeholder = "search a song"
+                 placeholder = "       search a song"
                 />          
             </div>
         )

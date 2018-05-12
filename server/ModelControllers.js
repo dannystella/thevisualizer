@@ -16,7 +16,7 @@ helpers.getMusic = function() {
 
 helpers.save = (song) => {
     return Song.create(song, function(err){
-        if(err){
+        if(err) {
             console.log(err);
         } else {
             console.log("success");

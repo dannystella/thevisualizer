@@ -5,22 +5,23 @@ import Search from './search.js';
 import List from './list.js';
 import VisualOne from './visual1.js';
 import VisualTwo from './visual2.js';
-import VisualThree from './visual3.js';
-import { Menu, Segment } from 'semantic-ui-react'
+// import VisualThree from './visual3.js';
+// import { Menu, Segment } from 'semantic-ui-react'
 import './App.css';
 // import './App2.css';
 
 class App extends Component {
-    constructor(props){
+    constructor(props) {
         super(props);
 
         this.state = {
-          visualState: 1,  
+          visualState: 0,  
           currentSong: '',
           currentList: [],
-          listTrigger: false  
+          listTrigger: false,
+          context: new AudioContext(),
+          source: ''
         }
-        let State = 1;
         // this.createVisualization = this.createVisualization.bind(this);
         // this.createVisualizationTwo = this.createVisualizationTwo.bind(this);
         this.syncMusic =this.syncMusic.bind(this);
@@ -29,6 +30,7 @@ class App extends Component {
         this.listHide =this.listHide.bind(this);
         this.controlState = this.controlState.bind(this);
         this.play = this.play.bind(this);
+        this.renderBackground = this.renderBackground.bind(this);
     }
 
     play() {
@@ -37,9 +39,17 @@ class App extends Component {
 
     componentDidMount() {
         console.log("mounted");
+        let audio = this.refs.audio;
+        audio.crossOrigin = "anonymous";
+        let audioSrc = this.state.context.createMediaElementSource(audio);
+        audio.volume = 0.3;
+        this.setState({
+            source: audioSrc,
+            visualState: 1
+        })
         // this.createVisualizationTwo()
     }
-    
+
     controlState(input) {
         if(input === 1 ){
             this.setState({
@@ -56,7 +66,22 @@ class App extends Component {
         }
 
     }
-
+    play() {
+        this.refs.audio.play();
+    }
+    pause() {
+        this.refs.audio.pause();
+    }
+    VolumeUp() {
+        if(this.refs.audio.volume !== 1) {
+          this.refs.audio.volume+=0.1;
+        }
+    }
+    VolumeDown() {
+        if(this.refs.audio.volume > 0.1) {
+          this.refs.audio.volume-=0.1;
+        }
+    }
     syncMusic(input) {
       
       this.setState({
@@ -69,7 +94,7 @@ class App extends Component {
       })
     }
     
-    listMusic(){
+    listMusic() {
       axios.get('/music')
       .then((data) => {
         this.setState({
@@ -78,42 +103,79 @@ class App extends Component {
       })    
     }
     
-    listHide(){
+    listHide() {
         var newTrigger = !this.state.listTrigger;
         this.setState({
             listTrigger: newTrigger
         })
     }
 
-    deleteSong(song){
+    deleteSong(song) {
         var newList = this.state.currentList.filter(item => {
             return item !== song;
         })
         this.setState({
             currentList: newList
         })
-      axios.post('delete', {
+      axios.post('/delete', {
           url: song
       }).then(() => {
         this.listMusic()
       })    
     }
 
+    renderBackground() {
+
+    }
+
     render() {
+        const backgroundWhite = {
+            backgroundColor: "white"
+        }
+        
+        const backgroundBlack = {
+            backgroundColor: "black"
+        }
         return (
-            <div className="App">
-               
-                {this.state.visualState === 1 && <VisualOne currentSong = {this.state.currentSong} />}
-                {this.state.visualState === 2 && <VisualTwo currentSong = {this.state.currentSong} />}
+            <div className="App" style = {{backgroundColor: this.state.visualState === 1 ? 'black' : 'white' }} >
+              <div className="ui inverted segment">
+                <div className="ui inverted secondary four item menu">
+                    <a className="item" onClick = {this.play.bind(this)}>
+                    Play
+                    </a>
+                    <a className="item" onClick = {this.pause.bind(this)}>
+                    Pause
+                    </a>
+                    <a className="item" onClick = {this.VolumeUp.bind(this)}>
+                    Volume +
+                    </a>
+                    <a className="item" onClick = {this.VolumeDown.bind(this)}>
+                    Volume -
+                    </a>
+                </div>
+                </div>            
+            <div id="audio_box">
+                <audio
+                    ref="audio"
+                    autoPlay={true}
+                    controls={true}
+                    crossOrigin="anonymous"
+                    src={this.state.currentSong}
+                    // {this.props.currentSong}
+                    >
+                    </audio>
+            </div>               
+                {this.state.visualState === 1 && <VisualOne currentSong = {this.state.currentSong} visualState = {this.state.visualState} context = {this.state.context} source = {this.state.source} />}
+                {this.state.visualState === 2 && <VisualTwo currentSong = {this.state.currentSong} visualState = {this.state.visualState} context = {this.state.context} source = {this.state.source} />}
                 {/* {this.state.visualState === 3 && <VisualThree currentSong = {this.state.currentSong} />} */}
                 <Search syncMusic = {this.syncMusic} />
-                        <div>  
+                        <div style = {{backgroundColor: this.state.visualState === 1 ? 'black' : 'white' }}>  
                         <button onClick = {(e => {
-                            this.controlState(1)
+                            this.controlState(1);
                         })}>Visual One </button>                               
                         <button onClick = {(e => {
-                            this.listMusic()
-                            this.listHide()
+                            this.listMusic();
+                            this.listHide();
                         })} >Get all Music</button>  
                         <button onClick = {(e => {
                             this.controlState(2)
@@ -121,7 +183,7 @@ class App extends Component {
                         {/* <button onClick = {(e => {
                             this.controlState(3)
                         })}>Visual Three </button>                          */}
-                        { this.state.listTrigger && <List deleteSong = {this.deleteSong} syncMusic = {this.syncMusic} currentList = {this.state.currentList} listMusic = {this.listMusic}/>    }
+                        { this.state.listTrigger && <List deleteSong = {this.deleteSong} syncMusic = {this.syncMusic} currentList = {this.state.currentList} listMusic = {this.listMusic} visualState = {this.state.visualState}/>    }
                         </div>
                     </div>
                 );

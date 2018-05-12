@@ -9,28 +9,43 @@ export default class VisualTwo extends React.Component {
     componentDidMount() {
         this.createVisualization()
     }
+    componentWillMount() {
+        // console.log("Updating to timestamp: " + this.props.context.currentTime);
+        // var currentTime = this.props.context.currentTime;
+        console.log("wil")
+        // var time = this.props.context.currentTime;
+        // let context = this.props.context;
+        // context.currentTime = time;
+        //    this.props.context.currentTime = currentTime;
+        document.body.style.backgroundColor = this.props.visualState === 1 ? 'black' : 'white';
 
+    }
+    componentDidUpdate(prevProps, prevState) {
+        console.log("updated")
+    }
     createVisualization() {
         // Window.AudioContext.close()
-        let context = new AudioContext();
+        let context = this.props.context;
+   
         let analyser = context.createAnalyser();
         let canvas = this.refs.analyzerCanvas;
         let ctx = canvas.getContext('2d');
         canvas.width = 600; 
         canvas.height = 300;
-        let audio = this.refs.audio;
-        audio.crossOrigin = "anonymous";
-        let audioSrc = context.createMediaElementSource(audio);
-        
+        // let audio = this.refs.audio;
+        // audio.crossOrigin = "anonymous";
+        // let audioSrc = context.createMediaElementSource(audio);
+        let audioSrc = this.props.source;
         audioSrc.connect(analyser);
         audioSrc.connect(context.destination);
         analyser.connect(context.destination);
-
         function renderFrame() {
             let freqData = new Uint8Array(analyser.frequencyBinCount);
             requestAnimationFrame(renderFrame);
             analyser.getByteFrequencyData(freqData);
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#FFFFFF';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            // ctx.clearRect(0, 0, canvas.width, canvas.height);
             ctx.fillStyle = '#9933ff';
             let bars = 200;
             for (var i = 0; i < bars; i++) {
@@ -39,56 +54,18 @@ export default class VisualTwo extends React.Component {
               let bar_height = -(freqData[i] / 2);
               ctx.fillRect(bar_x, canvas.height, bar_width, bar_height);
             }
+
+
         };
+        // audioSrc.currentTime = time;
+        // console.log(audioSrc.currentTime);
         renderFrame();
-    }
-    play() {
-        this.refs.audio.play();
-    }
-    pause() {
-        this.refs.audio.pause();
-    }
-    VolumeUp() {
-        if(this.refs.audio.volume !== 1) {
-          this.refs.audio.volume+=0.1;
-        }
-    }
-    VolumeDown() {
-        if(this.refs.audio.volume > 0.1) {
-          this.refs.audio.volume-=0.1;
-        }
     }
 
     render() {
         return (
-            <div id="mp3_player">
-             <div className="ui inverted segment">
-                <div className="ui inverted secondary four item menu">
-                    <a className="item" onClick = {this.play.bind(this)}>
-                    Play
-                    </a>
-                    <a className="item" onClick = {this.pause.bind(this)}>
-                    Pause
-                    </a>
-                    <a className="item" onClick = {this.VolumeUp.bind(this)}>
-                    Volume +
-                    </a>
-                    <a className="item" onClick = {this.VolumeDown.bind(this)}>
-                    Volume -
-                    </a>
-                </div>
-                </div>
-            <div id="audio_box">
-                <audio
-                    ref="audio"
-                    autoPlay={true}
-                    controls={true}
-                    crossOrigin="anonymous"
-                    src={this.props.currentSong}
-                    // {this.props.currentSong}
-                    >
-                    </audio>
-            </div>
+            <div id="mp3_player" >
+
                 <canvas
                     ref="analyzerCanvas"
                     id="analyzer"

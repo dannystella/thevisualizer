@@ -12,13 +12,13 @@ const helpers = require('./ModelControllers.js').helpers
 
 // })
 
-app.use(express.static(__dirname + '/../build/'));
+app.use(express.static(__dirname + '/../public/'));
 
 app.use(bodyParser.json())
 app.use(function (req, res, next) {
 
   // Website you wish to allow to connect
-  res.setHeader('Access-Control-Allow-Origin', 'http://http://localhost:3000');
+  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
 
   // Request methods you wish to allow
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
@@ -36,8 +36,11 @@ app.use(function (req, res, next) {
 
 app.get('/music', function(req, res) {
   helpers.getMusic()
-  .then(function(data) {
+  .then((data) =>  {
     res.send(data);
+  })
+  .catch((err) => {
+    console.log("reloading");
   })
 })
 
