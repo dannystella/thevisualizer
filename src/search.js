@@ -26,7 +26,7 @@ export default class Search extends React.Component {
                 }
                 onKeyPress={(e) => {
                     if(e.key === 'Enter') {
-                        this.props.addMusic(this.state.searchInput); 
+                        this.props.addSong(this.state.searchInput); 
                         this.resetInput();                    
                         }
                     }
