@@ -19,7 +19,7 @@ class App extends Component {
           currentSong: '',
           currentList: [],
           listTrigger: false,
-          context: new AudioContext(),
+          context: '',
           source: ''
         }
         // this.createVisualization = this.createVisualization.bind(this);
@@ -41,8 +41,12 @@ class App extends Component {
     componentDidMount() {
         console.log("mounted");
         let audio = this.refs.audio;
+        let context = new AudioContext();
+        this.setState({
+            context: context
+        })
         audio.crossOrigin = "anonymous";
-        let audioSrc = this.state.context.createMediaElementSource(audio);
+        let audioSrc = context.createMediaElementSource(audio);
         audio.volume = 0.3;
         this.setState({
             source: audioSrc,
